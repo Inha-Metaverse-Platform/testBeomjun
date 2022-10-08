@@ -3,35 +3,47 @@ var fs = require('fs');
 var url = require('url');
 var qs = require('querystring');
 
-function templateHTML(title, list, body, control){
-  return `
-  <!doctype html>
-  <html>
-  <head>
-    <title>CRUD 게시판 - ${title}</title>
-    <meta charset="utf-8">
-  </head>
-  <body>
-    <h1><a href="/">CRUD 게시판 연습</a></h1>
-    ${list}
-    ${control}
-    ${body}
-  </body>
-  </html>
-  `;
-}
-function templateList(filelist){
-  var list = '<ul>';
-  var i = 0;
-  while(i < filelist.length){
-    list = list + `<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`;
-    i++;
+var template = {
+  html:function(title, list, body, control){
+    return `
+    <!doctype html>
+    <html>
+    <head>
+      <link href="styles.css" rel="stylesheet" />
+      <style>
+        h2 {
+          color: blue;
+        }
+      </style>
+      <title>CRUD 게시판 - ${title}</title>
+      <meta charset="utf-8">
+    </head>
+    <body>
+      <h1><a href="/">CRUD 게시판 연습</a></h1>
+      ${list}
+      ${control}
+      ${body}
+    </body>
+    </html>
+    `;
+  },
+
+  list:function(filelist){
+    var list = '<ul>';
+    var i = 0;
+    while(i < filelist.length){
+      list = list + `<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`;
+      i++;
+    }
+    list = list+'</ul>';
+    return list;
   }
-  list = list+'</ul>';
-  return list;
+
 }
 
-var app = http.createServer(function(request,response){
+
+
+var app = http.createServer(function(request, response){
     var _url = request.url;
     var queryData = url.parse(_url, true).query;
     var pathname = url.parse(_url, true).pathname;
@@ -40,8 +52,8 @@ var app = http.createServer(function(request,response){
         fs.readdir('./data', function(error, filelist){
           var title = '홈';
           var description = '홈 화면입니다';
-          var list = templateList(filelist);
-          var template = templateHTML(title, list,
+          var list = template.list(filelist);
+          var template = template.html(title, list,
             `<h2>${title}</h2>${description}`,
             `<a href="/create">새 글 작성</a>`
           );
@@ -52,8 +64,8 @@ var app = http.createServer(function(request,response){
         fs.readdir('./data', function(error, filelist){
           fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){
             var title = queryData.id;
-            var list = templateList(filelist);
-            var template = templateHTML(title, list,
+            var list = template.list(filelist);
+            var template = template.html(title, list,
               `<h2>${title}</h2>${description}`,
 
               `<a href="/create">새 글 작성</a>
@@ -72,8 +84,8 @@ var app = http.createServer(function(request,response){
     } else if(pathname === '/create'){
       fs.readdir('./data', function(error, filelist){
         var title = 'CRUD 게시판 - 새 글 작성';
-        var list = templateList(filelist);
-        var template = templateHTML(title, list, `
+        var list = template.list(filelist);
+        var template = template.html(title, list, `
           <form action="/create_process" method="post">
             <p><input type="text" name="title" placeholder="글 제목"></p>
             <p>
@@ -91,8 +103,8 @@ var app = http.createServer(function(request,response){
       fs.readdir('./data', function(error, filelist){
         fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){
           var title = queryData.id;
-          var list = templateList(filelist);
-          var template = templateHTML(title, list,
+          var list = template.list(filelist);
+          var template = template.html(title, list,
             `
             <form action="/update_process" method="post">
               <input type="hidden" name="id" value="${title}">
