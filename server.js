@@ -30,8 +30,8 @@ var app = http.createServer(function(request, response){
           var accountlist = template.list(accounts);
           var html = template.HTML(title, accountlist,
                 `<h2>${title}</h2>${description}`,
-                `<a href="/create">회원가입</a>
-                <a href="/login">로그인</a>`
+                `<a href="/login">로그인</a>
+                <a href="/create">회원가입</a>`
               )
           response.writeHead(200);
           response.end(html);
@@ -173,7 +173,55 @@ var app = http.createServer(function(request, response){
             response.end();
           })
       });
-    } else {
+    } else if(pathname === '/login'){
+      db.query(`SELECT * FROM account`, function(err, accounts){ //account table에 존재하는 모든 데이터 불러옴
+        if(err){
+          throw err;
+        }
+
+        var title = '로그인 페이지';
+        var accountlist = template.list(accounts);
+        var html = template.HTML(title, accountlist,
+              `<h2>로그인</h2>
+              <form action="/login_process" method="post">
+                <p><input type="text" name="user_id" placeholder="아이디"></p>
+                <p><input type="text" name="user_pw" placeholder="비밀번호"></p>
+                <p>
+                  <input type="submit" value="로그인">
+                </p>
+              </form>`, ''
+            )
+        response.writeHead(200);
+        response.end(html);
+      });
+    } else if(pathname === '/login_process'){
+      var body = '';
+      request.on('data', function(data){
+          body = body + data;
+      }); //login 페이지에서 넘어온 정보 저장
+
+      // request.on('end', function(){
+      //     var post = qs.parse(body);
+      //
+      //     db.query(`SELECT * FROM account`, function(err, accounts){ //MySQL에서 SELECT * FROM account을 실행한 결과를 반환
+      //       //object들로 구성된 배열이 리턴됨
+      //       var title = 'INHA METAVERSE';
+      //     });
+      //
+      //     db.query(`
+      //     UPDATE account SET user_id = ?, user_pw = ? WHERE id=?;`,
+      //     [post.user_id, post.user_pw, post.id],
+      //     function(err, result){
+      //       if(err) {
+      //         throw err;
+      //       }
+      //       response.writeHead(302, {Location: `/?id=${post.id}`});
+      //       response.end();
+      //     })
+      response.writeHead(200);
+      response.end('로그인 시도중');
+    }
+    else {
       response.writeHead(404);
       response.end('Not found');
     }
