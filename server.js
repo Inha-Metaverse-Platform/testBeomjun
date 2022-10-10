@@ -30,7 +30,8 @@ var app = http.createServer(function(request, response){
           var accountlist = template.list(accounts);
           var html = template.HTML(title, accountlist,
                 `<h2>${title}</h2>${description}`,
-                `<a href="/create">회원가입</a>`
+                `<a href="/create">회원가입</a>
+                <a href="/login">로그인</a>`
               )
           response.writeHead(200);
           response.end(html);
@@ -157,7 +158,21 @@ var app = http.createServer(function(request, response){
           })
       });
     } else if(pathname === '/delete_process'){
+      var body = '';
+      request.on('data', function(data){
+          body = body + data;
+      }); //query data에 있던 정보 받아옴.
 
+      request.on('end', function(){
+          var post = qs.parse(body);
+          db.query(`DELETE FROM account WHERE id = ?;`, [post.id], function(err){
+            if(err) {
+              throw err;
+            }
+            response.writeHead(302, {Location: `/`});
+            response.end();
+          })
+      });
     } else {
       response.writeHead(404);
       response.end('Not found');
