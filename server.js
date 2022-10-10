@@ -75,8 +75,9 @@ var app = http.createServer(function(request, response){
         var title = '회원가입 페이지';
         var accountlist = template.list(accounts);
         var html = template.HTML(title, accountlist,
-              `<h2>회원 가입 (id와 pw를 꼭 입력하세요)</h2>
+              `<h2>회원 가입을 환영합니다</h2>
               <form action="/create_process" method="post">
+              <p><input type="text" name="username" placeholder="닉네임"></p>
                 <p><input type="text" name="user_id" placeholder="아이디"></p>
                 <p><input type="text" name="user_pw" placeholder="비밀번호"></p>
                 <p>
@@ -98,9 +99,9 @@ var app = http.createServer(function(request, response){
           var post = qs.parse(body);
 
           db.query(`
-          INSERT INTO account (user_id, user_pw, created)
-          VALUES(?, ?, NOW());`,
-          [post.user_id, post.user_pw],
+          INSERT INTO account (user_id, user_pw, username, created)
+          VALUES(?, ?, ?, NOW());`,
+          [post.user_id, post.user_pw, post.username],
           function(err, result){
             if(err) {
               throw err;
