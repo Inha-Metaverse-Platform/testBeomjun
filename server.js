@@ -35,114 +35,65 @@ var app = http.createServer(function(request, response){
           response.writeHead(200);
           response.end(html);
         });
-      } else {
-        fs.readdir('./data', function(error, filelist){
-          fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){
-            var title = queryData.id;
-            var list = template.list(filelist);
-            var template = template.html(title, list,
-              `<h2>${title}</h2>${description}`,
+      } else { //queryData에 뭔가 존재
+        db.query(`SELECT * FROM account`, function(err, accounts){ //account table에 존재하는 모든 데이터 불러옴
+          if(err) {
+            throw err; //오류 발생하면 throw
+          }
+          db.query(`SELECT * FROM account WHERE id=${queryData.id}`,  function(err2, account){ //queryData.id를 참조해 몇번째 계정에 접속중인지 확인
+            if(err2) {
+              throw err2; //오류 발생하면 throw
+            }
 
-              `<a href="/create">새 글 작성</a>
-               <a href="/update?id=${title}">글 수정</a>
-               <form action="delete_process" method="post">
-                 <input type="hidden" name="id" value="${title}">
-                 <input type="submit" value="delete">
-               </form>
-               `
+            //topic이 배열로서 들어온다는 점 주의!
+            var user_id = account[0].user_id;
+            var user_pw = topic[0].user_pw; //데이터에서 id와 pw 불러옴
+            var accountlist = template.list(accounts);
+
+            var html = template.HTML(title, accountlist,
+                  `<h2>${title}</h2>${description}`,
+                  `<a href="/create">회원가입</a>
+                    <a href="/update?id=${queryData.id}">회원정보 변경</a>
+                    <form action="delete_process" method="post">
+                      <input type="hidden" name="id" value="${queryData.id}">
+                      <input type="submit" value="탈퇴">
+                    </form>`
             );
             response.writeHead(200);
-            response.end(template);
-          });
+          response.end(html);
+          })
         });
+
       }
     } else if(pathname === '/create'){
-      fs.readdir('./data', function(error, filelist){
-        var title = 'CRUD 게시판 - 새 글 작성';
-        var list = template.list(filelist);
-        var template = template.html(title, list, `
-          <form action="/create_process" method="post">
-            <p><input type="text" name="title" placeholder="글 제목"></p>
-            <p>
-              <textarea name="description" rows="4" cols="50" placeholder="본문 내용"></textarea>
-            </p>
-            <p>
-              <input type="submit" placeholder="작성완료">
-            </p>
-          </form>
-        `, '');
+      db.query(`SELECT * FROM account`, function(err, accounts){ //account table에 존재하는 모든 데이터 불러옴
+        if(err){
+          throw err;
+        }
+
+        var title = 'Sign_Up';
+        var accountlist = template.list(accounts);
+        var html = template.HTML(title, accountlist,
+              `<h2>회원 가입 (id와 pw를 꼭 입력하세요)</h2>
+              <form action="/create_process" method="post">
+                <p><input type="text" name="user_id" placeholder="아이디"></p>
+                <p><input type="text" name="user_pw" placeholder="비밀번호"></p>
+                <p>
+                  <input type="submit" value="회원가입">
+                </p>
+              </form>`, ''
+            )
         response.writeHead(200);
-        response.end(template);
-      });
+        response.end(html);
+
     } else if(pathname === '/update') {
-      fs.readdir('./data', function(error, filelist){
-        fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){
-          var title = queryData.id;
-          var list = template.list(filelist);
-          var template = template.html(title, list,
-            `
-            <form action="/update_process" method="post">
-              <input type="hidden" name="id" value="${title}">
-              <p><input type="text" name="title" placeholder="글 제목" value="${title}"></p>
-              <p>
-                <textarea name="description" rows="4" cols="50" placeholder="본문 내용">${description}</textarea>
-              </p>
-              <p>
-                <input type="submit" placeholder="작성완료">
-              </p>
-            </form>
-            `,
-            `<a href="/create">새 글 작성</a>
-             <a href="/update?id=${title}">글 수정</a>`
-          );
-          response.writeHead(200);
-          response.end(template);
-        });
-      });
-    } else if(pathname === '/update_process'){
-      var body = '';
-      request.on('data', function(data){
-          body += data;
-      });
-      request.on('end', function(){
-          var post = qs.parse(body);
-          var id = post.id;
-          var title = post.title;
-          var description = post.description;
-          fs.rename(`data/${id}`, `data/${title}`, function(err){
-            fs.writeFile(`data/${title}`, description, 'utf8', function(err){
-              response.writeHead(302, {Location: `/?id=${title}`});
-              response.end();
-          })
-        });
-      });
+
     } else if(pathname === '/create_process'){
-      var body = '';
-      request.on('data', function(data){
-          body += data;
-      });
-      request.on('end', function(){
-          var post = qs.parse(body);
-          var title = post.title;
-          var description = post.description;
-          fs.writeFile(`data/${title}`, description, 'utf8', function(err){
-            response.writeHead(302, {Location: `/?id=${title}`});
-            response.end();
-          })
-      });
+
+    } else if(pathname === '/update_process'){
+
     } else if(pathname === '/delete_process'){
-      var body = '';
-      request.on('data', function(data){
-          body += data;
-      });
-      request.on('end', function(){
-          var post = qs.parse(body);
-          var id = post.id;
-          fs.unlink(`data/${id}`, function(err){
-            response.writeHead(302, {Location: `/`});
-            response.end();
-          })
-      });
+
     } else {
       response.writeHead(404);
       response.end('Not found');
