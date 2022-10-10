@@ -23,7 +23,7 @@ var app = http.createServer(function(request, response){
 
     if(pathname === '/'){ //어떤 파일에도 접근하고 있지 않음
       if(queryData.id === undefined){ //queryData에도 아무것도 없음 ->홈화면
-        db.query(`SELECT * FROM account`, function(err, accounts){ //MySQL에서 SELECT * FROM topic을 실행한 결과를 반환
+        db.query(`SELECT * FROM account`, function(err, accounts){ //MySQL에서 SELECT * FROM account을 실행한 결과를 반환
           //object들로 구성된 배열이 리턴됨
           var title = 'INHA METAVERSE';
           var description = 'Welcome to Inha Metaverse';
@@ -47,7 +47,7 @@ var app = http.createServer(function(request, response){
 
             //topic이 배열로서 들어온다는 점 주의!
             var user_id = account[0].user_id;
-            var user_pw = topic[0].user_pw; //데이터에서 id와 pw 불러옴
+            var user_pw = account[0].user_pw; //데이터에서 id와 pw 불러옴
             var accountlist = template.list(accounts);
 
             var html = template.HTML(title, accountlist,
