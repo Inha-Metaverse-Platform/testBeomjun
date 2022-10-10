@@ -47,12 +47,12 @@ var app = http.createServer(function(request, response){
 
             //topic이 배열로서 들어온다는 점 주의!
             var user_id = account[0].user_id;
-            var user_pw = account[0].user_pw; //데이터에서 id와 pw 불러옴
+            var user_pw = account[0].user_pw;
+            var username = account[0].username; //데이터에서 id와 pw, username 불러옴
             var accountlist = template.list(accounts);
-            var title = "계정 정보";
 
-            var html = template.HTML(title, accountlist,
-                  `<h2>${title}</h2>$<p>id : ${user_id}, pw : ${user_pw}`,
+            var html = template.HTML(username, accountlist,
+                  `<h2>${username}</h2><p>id : ${user_id}, pw : ${user_pw}`,
                   `<a href="/create">회원가입</a>
                     <a href="/update?id=${queryData.id}">회원정보 변경</a>
                     <form action="delete_process" method="post">
