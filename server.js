@@ -102,9 +102,8 @@ var app = http.createServer(function(request, response){
           var html = template.HTML(title, accountlist,
             `<h2>회원정보 수정(닉네임은 변경 불가)</h2>
             <p>닉네임 : ${account[0].username}
-            <form action="/create_process" method="post">
+            <form action="/update_process" method="post">
             <input type="hidden" name="id" value="${account[0].id}">
-            <p><input type="text" name="username" placeholder="닉네임" value="${account[0].username}"></p>
               <p><input type="text" name="user_id" placeholder="아이디" value="${account[0].user_id}"></p>
               <p><input type="text" name="user_pw" placeholder="비밀번호" value="${account[0].user_pw}"></p>
               <p>
