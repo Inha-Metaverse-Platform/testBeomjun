@@ -105,8 +105,8 @@ var app = http.createServer(function(request, response){
             <form action="/create_process" method="post">
             <input type="hidden" name="id" value="${account[0].id}">
             <p><input type="text" name="username" placeholder="닉네임" value="${account[0].username}"></p>
-              <p><input type="text" name="user_id" placeholder="아이디" value="${topic[0].user_id}"></p>
-              <p><input type="text" name="user_pw" placeholder="비밀번호" value="${topic[0].user_pw}"></p>
+              <p><input type="text" name="user_id" placeholder="아이디" value="${account[0].user_id}"></p>
+              <p><input type="text" name="user_pw" placeholder="비밀번호" value="${account[0].user_pw}"></p>
               <p>
                 <input type="submit" value="수정완료">
               </p>
