@@ -52,7 +52,9 @@ var app = http.createServer(function(request, response){
             var accountlist = template.list(accounts);
 
             var html = template.HTML(username, accountlist,
-                  `<h2>${username}</h2><p>id : ${user_id}, pw : ${user_pw}`,
+                  `<h2>${username}</h2>
+                  <p>id : ${user_id}</p>
+                  <p>pw : ${user_pw}</p>`,
                   `<a href="/create">회원가입</a>
                     <a href="/update?id=${queryData.id}">회원정보 변경</a>
                     <form action="delete_process" method="post">
@@ -90,11 +92,34 @@ var app = http.createServer(function(request, response){
       });
     } else if(pathname === '/update') {
 
+      db.query(`SELECT * FROM account`, function(err, accounts){
+        if(err) {
+          throw err;
+        }
+        db.query(`SELECT * FROM account WHERE id=?`, [queryData.id], function(err2, account){
+          var title = '회원정보 수정';
+          var accountlist = template.list(accounts);
+          var html = template.HTML(title, topiclist,
+            `<h2>회원정보 수정(닉네임은 변경 불가)</h2>
+            <p>닉네임 : ${account[0].username}
+            <form action="/create_process" method="post">
+            <input type="hidden" name="id" value="${account[0].id}">
+            <p><input type="text" name="username" placeholder="닉네임" value="${account[0].username}"></p>
+              <p><input type="text" name="user_id" placeholder="아이디" value="${topic[0].user_id}"></p>
+              <p><input type="text" name="user_pw" placeholder="비밀번호" value="${topic[0].user_pw}"></p>
+              <p>
+                <input type="submit" value="수정완료">
+              </p>
+            </form>`, ''
+              )
+          response.writeHead(200);
+          response.end(html);
+        })
     } else if(pathname === '/create_process'){
       var body = '';
       request.on('data', function(data){
           body = body + data;
-      });
+      }); //create 페이지에서 넘어온 정보 저장
       request.on('end', function(){
           var post = qs.parse(body);
 
@@ -112,7 +137,25 @@ var app = http.createServer(function(request, response){
           })
       });
     } else if(pathname === '/update_process'){
+      var body = '';
+      request.on('data', function(data){
+          body = body + data;
+      }); //update 페이지에서 넘어온 정보 저장
 
+      request.on('end', function(){
+          var post = qs.parse(body);
+
+          db.query(`
+          UPDATE account SET user_id = ?, user_pw = ? WHERE id=?;`,
+          [post.user_id, post.user_pw, post.id],
+          function(err, result){
+            if(err) {
+              throw err;
+            }
+            response.writeHead(302, {Location: `/?id=${post.id}`});
+            response.end();
+          })
+      });
     } else if(pathname === '/delete_process'){
 
     } else {

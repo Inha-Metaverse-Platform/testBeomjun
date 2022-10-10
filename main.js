@@ -105,7 +105,6 @@ var app = http.createServer(function(request,response){
             db.query(`SELECT * FROM topic WHERE id=?`, [queryData.id], function(err2, topic){
               var title = 'Update';
               var topiclist = template.list(topics);
-              var updateId = queryData.id - 1;
               var html = template.HTML(title, topiclist,
                     `<form action="/update_process" method="post">
                       <input type="hidden" name="id" value="${topic[0].id}">
