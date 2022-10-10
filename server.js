@@ -49,6 +49,7 @@ var app = http.createServer(function(request, response){
             var user_id = account[0].user_id;
             var user_pw = account[0].user_pw; //데이터에서 id와 pw 불러옴
             var accountlist = template.list(accounts);
+            var title = "계정 정보";
 
             var html = template.HTML(title, accountlist,
                   `<h2>${title}</h2>${description}`,
