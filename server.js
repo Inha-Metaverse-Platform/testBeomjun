@@ -27,8 +27,8 @@ var app = http.createServer(function(request, response){
           //object들로 구성된 배열이 리턴됨
           var title = 'INHA METAVERSE';
           var description = 'Welcome to Inha Metaverse';
-          var topiclist = template.list(topics);
-          var html = template.HTML(title, topiclist,
+          var accountlist = template.list(accounts);
+          var html = template.HTML(title, accountlist,
                 `<h2>${title}</h2>${description}`,
                 `<a href="/create">회원가입</a>`
               )
