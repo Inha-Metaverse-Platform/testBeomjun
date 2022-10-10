@@ -71,7 +71,7 @@ var app = http.createServer(function(request, response){
           throw err;
         }
 
-        var title = 'Sign_Up';
+        var title = '회원가입 페이지';
         var accountlist = template.list(accounts);
         var html = template.HTML(title, accountlist,
               `<h2>회원 가입 (id와 pw를 꼭 입력하세요)</h2>
