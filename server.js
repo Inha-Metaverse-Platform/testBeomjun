@@ -89,7 +89,26 @@ var app = http.createServer(function(request, response){
     } else if(pathname === '/update') {
 
     } else if(pathname === '/create_process'){
+      var body = '';
+      request.on('data', function(data){
+          body = body + data;
+      });
+      request.on('end', function(){
+          var post = qs.parse(body);
 
+          db.query(`
+          INSERT INTO account (user_id, user_pw, created)
+          VALUES(?, ?, NOW());`,
+          [post.user_id, post.user_pw],
+          function(err, result){
+            if(err) {
+              throw err;
+            }
+
+            response.writeHead(302, {Location: `/?id=${result.insertId}`});
+            response.end();
+          })
+      });
     } else if(pathname === '/update_process'){
 
     } else if(pathname === '/delete_process'){
