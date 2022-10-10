@@ -52,7 +52,7 @@ var app = http.createServer(function(request, response){
             var title = "계정 정보";
 
             var html = template.HTML(title, accountlist,
-                  `<h2>${title}</h2>${description}`,
+                  `<h2>${title}</h2>$<p>id : ${user_id}, pw : ${user_pw}`,
                   `<a href="/create">회원가입</a>
                     <a href="/update?id=${queryData.id}">회원정보 변경</a>
                     <form action="delete_process" method="post">
