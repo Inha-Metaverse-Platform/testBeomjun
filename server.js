@@ -2,63 +2,38 @@ var http = require('http');
 var fs = require('fs');
 var url = require('url');
 var qs = require('querystring');
+var mysql = require('mysql');
 
-var template = {
-  html:function(title, list, body, control){
-    return `
-    <!doctype html>
-    <html>
-    <head>
-      <link href="styles.css" rel="stylesheet" />
-      <style>
-        h2 {
-          color: blue;
-        }
-      </style>
-      <title>CRUD 게시판 - ${title}</title>
-      <meta charset="utf-8">
-    </head>
-    <body>
-      <h1><a href="/">CRUD 게시판 연습</a></h1>
-      ${list}
-      ${control}
-      ${body}
-    </body>
-    </html>
-    `;
-  },
-
-  list:function(filelist){
-    var list = '<ul>';
-    var i = 0;
-    while(i < filelist.length){
-      list = list + `<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`;
-      i++;
-    }
-    list = list+'</ul>';
-    return list;
-  }
-
-}
+var template = require('./lib/template.js');
 
 
+//설치된 mysql DB와 통신하기 위한 코드
+var db = mysql.createConnection({ //conection을 생성한다
+  host     : 'localhost', //node.js 서버와 mysql 서버가 같은 곳에 있음
+  user     : 'root',
+  password : 'password', //mysql에서 사용중인 패스워드
+  database : 'testsql' //사용할 데이터베이스
+});
+db.connect();
 
 var app = http.createServer(function(request, response){
     var _url = request.url;
-    var queryData = url.parse(_url, true).query;
-    var pathname = url.parse(_url, true).pathname;
-    if(pathname === '/'){
-      if(queryData.id === undefined){
-        fs.readdir('./data', function(error, filelist){
-          var title = '홈';
-          var description = '홈 화면입니다';
-          var list = template.list(filelist);
-          var template = template.html(title, list,
-            `<h2>${title}</h2>${description}`,
-            `<a href="/create">새 글 작성</a>`
-          );
+    var queryData = url.parse(_url, true).query; //query data 자리에서, ? 뒤에 뭐가 왔는지. 아무것도 없으면 undefined
+    var pathname = url.parse(_url, true).pathname; //path, 어떤 파일에 접근할건지 알려줌.
+
+    if(pathname === '/'){ //어떤 파일에도 접근하고 있지 않음
+      if(queryData.id === undefined){ //queryData에도 아무것도 없음 ->홈화면
+        db.query(`SELECT * FROM account`, function(err, accounts){ //MySQL에서 SELECT * FROM topic을 실행한 결과를 반환
+          //object들로 구성된 배열이 리턴됨
+          var title = 'INHA METAVERSE';
+          var description = 'Welcome to Inha Metaverse';
+          var topiclist = template.list(topics);
+          var html = template.HTML(title, topiclist,
+                `<h2>${title}</h2>${description}`,
+                `<a href="/create">회원가입</a>`
+              )
           response.writeHead(200);
-          response.end(template);
+          response.end(html);
         });
       } else {
         fs.readdir('./data', function(error, filelist){
