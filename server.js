@@ -99,7 +99,7 @@ var app = http.createServer(function(request, response){
         db.query(`SELECT * FROM account WHERE id=?`, [queryData.id], function(err2, account){
           var title = '회원정보 수정';
           var accountlist = template.list(accounts);
-          var html = template.HTML(title, topiclist,
+          var html = template.HTML(title, accountlist,
             `<h2>회원정보 수정(닉네임은 변경 불가)</h2>
             <p>닉네임 : ${account[0].username}
             <form action="/create_process" method="post">
