@@ -208,20 +208,16 @@ var app = http.createServer(function(request, response){
           db.query('SELECT * FROM account WHERE user_id = ? AND user_pw = ?', [user_id, user_pw], function(error, results) {
               if (error) throw error;
               if (results.length > 0) {
-                  console.log('login successful');
-                  response.writeHead(302, {Location: `/`});
-                  response.end();
+                response.writeHead(200);
+                response.end('로그인 성공!');
               } else {
-                res.send(
-                  `<script>
-                    alert('로그인 실패!');
-                  </script>`
-                  );
+                response.writeHead(200);
+                response.end('아이디와 비밀번호가 올바르지 않습니다!');
               }
           });
       } else {
           response.writeHead(200);
-          response.end('Login Failed');
+          response.end('아이디와 비밀번호를 입력해주세요!');
       }
         console.log(post);
       })
