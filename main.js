@@ -4,7 +4,7 @@ var url = require('url');
 var qs = require('querystring');
 var template = require('./lib/template.js');
 var path = require('path');
-var mysql = require('mysql');
+var mysql = require('mysql'); //mysql은 있음!
 
 var db = mysql.createConnection({
   host:'localhost',
