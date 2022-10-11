@@ -209,16 +209,15 @@ var app = http.createServer(function(request, response){
               if (error) throw error;
               if (results.length > 0) {
                 response.writeHead(200);
-                response.end(`<h1>로그인 성공!</h1><h2>${results[0].username}님 반갑습니다`);
-                console.log(results[0].id);
+                response.end(`<h1>Login successful!</h1><h2>hello, ${results[0].username}`);
               } else {
                 response.writeHead(200);
-                response.end('<h1>아이디와 비밀번호가 올바르지 않습니다!</h1>');
+                response.end('<h1>Login failed</h1>');
               }
           });
       } else {
           response.writeHead(200);
-          response.end('<h1>아이디와 비밀번호를 입력해주세요!</h1>');
+          response.end('<h1>Please type ID and PW</h1>');
       }
         console.log(post);
       })
