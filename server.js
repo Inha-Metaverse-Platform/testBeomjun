@@ -205,7 +205,7 @@ var app = http.createServer(function(request, response){
         var user_pw = post.user_pw;
 
         if (user_id && user_pw) {
-          db.query('SELECT * FROM user WHERE user_id = ? AND user_pw = ?', [user_id, user_pw], function(error, results) {
+          db.query('SELECT * FROM account WHERE user_id = ? AND user_pw = ?', [user_id, user_pw], function(error, results) {
               if (error) throw error;
               if (results.length > 0) {
                   console.log('login successful');
