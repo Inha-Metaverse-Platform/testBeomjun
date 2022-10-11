@@ -209,7 +209,10 @@ var app = http.createServer(function(request, response){
               if (error) throw error;
               if (results.length > 0) {
                 response.writeHead(200);
-                response.end(`<h1>Login successful!</h1><h2>hello, ${results[0].username}`);
+                response.end(`<h1>Login successful!</h1><h2>hello, ${results[0].username}
+                  <form action="/webgl" method="post">
+                  <input type="submit" value="go to metaverse">
+                  `);
               } else {
                 response.writeHead(200);
                 response.end('<h1>Login failed</h1>');
