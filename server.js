@@ -199,27 +199,29 @@ var app = http.createServer(function(request, response){
       request.on('data', function(data){
           body = body + data;
       }); //login 페이지에서 넘어온 정보 저장
+      request.on('end', function(){
+        var post = qs.parse(body);
 
-      // request.on('end', function(){
-      //     var post = qs.parse(body);
-      //
-      //     db.query(`SELECT * FROM account`, function(err, accounts){ //MySQL에서 SELECT * FROM account을 실행한 결과를 반환
-      //       //object들로 구성된 배열이 리턴됨
-      //       var title = 'INHA METAVERSE';
-      //     });
-      //
-      //     db.query(`
-      //     UPDATE account SET user_id = ?, user_pw = ? WHERE id=?;`,
-      //     [post.user_id, post.user_pw, post.id],
-      //     function(err, result){
-      //       if(err) {
-      //         throw err;
-      //       }
-      //       response.writeHead(302, {Location: `/?id=${post.id}`});
-      //       response.end();
-      //     })
+        console.log(post);
+      })
+    //   if (username && password) {
+    //     connection.query('SELECT * FROM user WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
+    //         if (error) throw error;
+    //         if (results.length > 0) {
+    //             request.session.loggedin = true;
+    //             request.session.username = username;
+    //             response.redirect('/');
+    //             response.end();
+    //         } else {
+    //             response.send('<script type="text/javascript">alert("로그인 정보가 일치하지 않습니다."); document.location.href="/login";</script>');
+    //         }
+    //     });
+    // } else {
+    //     response.send('<script type="text/javascript">alert("username과 password를 입력하세요!"); document.location.href="/login";</script>');
+    //     response.end();
+    // }
       response.writeHead(200);
-      response.end('로그인 시도중');
+      response.end('trying to login');
     }
     else {
       response.writeHead(404);
