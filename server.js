@@ -201,25 +201,27 @@ var app = http.createServer(function(request, response){
       }); //login 페이지에서 넘어온 정보 저장
       request.on('end', function(){
         var post = qs.parse(body);
+        var user_id = post.user_id;
+        var user_pw = post.user_pw;
 
+        if (user_id && user_pw) {
+          db.query('SELECT * FROM user WHERE user_id = ? AND user_pw = ?', [user_id, user_pw], function(error, results) {
+              if (error) throw error;
+              if (results.length > 0) {
+                  console.log('login successful');
+                  response.writeHead(302, {Location: `/`});
+                  response.end();
+              } else {
+                  alert("로그인 실패!");
+              }
+          });
+      } else {
+          response.send('<script type="text/javascript">alert("username과 password를 입력하세요!"); document.location.href="/login";</script>');
+          response.end();
+      }
         console.log(post);
       })
-    //   if (username && password) {
-    //     connection.query('SELECT * FROM user WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
-    //         if (error) throw error;
-    //         if (results.length > 0) {
-    //             request.session.loggedin = true;
-    //             request.session.username = username;
-    //             response.redirect('/');
-    //             response.end();
-    //         } else {
-    //             response.send('<script type="text/javascript">alert("로그인 정보가 일치하지 않습니다."); document.location.href="/login";</script>');
-    //         }
-    //     });
-    // } else {
-    //     response.send('<script type="text/javascript">alert("username과 password를 입력하세요!"); document.location.href="/login";</script>');
-    //     response.end();
-    // }
+
       response.writeHead(200);
       response.end('trying to login');
     }
