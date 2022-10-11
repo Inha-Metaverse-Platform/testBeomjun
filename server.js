@@ -212,7 +212,11 @@ var app = http.createServer(function(request, response){
                   response.writeHead(302, {Location: `/`});
                   response.end();
               } else {
-                  alert("로그인 실패!");
+                res.send(
+                  `<script>
+                    alert('로그인 실패!');
+                  </script>`
+                  );
               }
           });
       } else {
@@ -221,9 +225,6 @@ var app = http.createServer(function(request, response){
       }
         console.log(post);
       })
-
-      response.writeHead(200);
-      response.end('trying to login');
     }
     else {
       response.writeHead(404);
