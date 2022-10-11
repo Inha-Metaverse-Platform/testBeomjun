@@ -220,8 +220,8 @@ var app = http.createServer(function(request, response){
               }
           });
       } else {
-          response.send('<script type="text/javascript">alert("username과 password를 입력하세요!"); document.location.href="/login";</script>');
-          response.end();
+          response.writeHead(200);
+          response.end('Login Failed');
       }
         console.log(post);
       })
