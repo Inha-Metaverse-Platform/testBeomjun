@@ -19,8 +19,6 @@ pg.connect(err => {
   }
 })
 
-pg.query()
-
 //(req, res) => res.send()
 
 //var app = http.createServer(function(request,response)
