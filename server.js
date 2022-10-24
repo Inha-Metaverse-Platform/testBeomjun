@@ -43,6 +43,8 @@ var db = mysql.createConnection({ //conection을 생성한다
   database : 'testsql' //사용할 데이터베이스
 });
 
+
+
 db.connect();
 
 app.get('/', function(request, response) {
@@ -354,10 +356,8 @@ if(currentUser)
 		 {
 			if (clients[i].name == currentUser.name && clients[i].id == currentUser.id)
 			{
-
 				console.log("User "+clients[i].name+" has disconnected");
 				clients.splice(i,1);
-
 			};
 		};
 
