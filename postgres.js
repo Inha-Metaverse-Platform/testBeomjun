@@ -7,7 +7,7 @@ const {Pool} = require('pg');
 const pg = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'postgres',
+  database: 'accounts',
   password: 'password',
   port: 5432 //postgres의 기본 포트인듯?
 })

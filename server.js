@@ -43,9 +43,33 @@ var db = mysql.createConnection({ //conection을 생성한다
   database : 'testsql' //사용할 데이터베이스
 });
 
-
-
 db.connect();
+
+
+//postgres 연결 코드
+const {Pool} = require('pg');
+const pg = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'accounts',
+  password: 'password',
+  port: 5432 //postgres의 기본 포트인듯?
+})
+
+//postgres 잘 연결됐는지 확인
+pg.connect(err => {
+  if(err) console.log(err);
+  else{
+    console.log("postgres connected");
+  }
+})
+
+pg.query(`SELECT * FROM account`, (err, accounts) => {
+  if(err) console.log(err);
+  else {
+    console.log(accounts);
+  }
+})
 
 app.get('/', function(request, response) {
   db.query(`SELECT * FROM account`, function(err, accounts){
@@ -200,7 +224,7 @@ app.post('/login_process', function(request, response){
 app.post('/unity', function(request, response){
   response.sendFile(__dirname + "/views/index.html");
 
-  io.on('connection', function(socket){
+  io.on('connection', function(socket){ //콜백함수, 매개변수 socket
 
    //print a log in node.js command prompt
   console.log('A user ready for connection!');
