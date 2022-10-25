@@ -1,6 +1,6 @@
 //express import해서 그걸로 서버를 열었음
 var express = require("express");
-var app =express()
+var app = express()
 
 //http 모듈은 무슨 기능이지?
 //var http = require('http');
@@ -238,6 +238,7 @@ app.post('/unity', function(request, response){
 	//create a callback fuction to listening EmitPing() method in NetworkMannager.cs unity script
 	socket.on('PING', function (_pack)
 	{
+    console.log("There is PING");
 	  //console.log('_pack# '+_pack);
 	  var pack = JSON.parse(_pack);
 
