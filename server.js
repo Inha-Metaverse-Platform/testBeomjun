@@ -76,6 +76,8 @@ app.get('/', function(request, response) {
     var title = "INHA METAVERSE";
     var description = "Welcome to Inha Metaverse";
     var accountlist = template.list(accounts);
+    console.log("이건 mysql 버전");
+    console.log(accounts);
     var html = template.HTML(title, accountlist,
       `<h2>${title}</h2>${description}`,
       `<a href="/login">로그인</a>
