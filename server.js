@@ -67,7 +67,7 @@ pg.connect(err => {
 pg.query(`SELECT * FROM account`, (err, accounts) => {
   if(err) console.log(err);
   else {
-    console.log(accounts.rows)
+    console.log(accounts);
   }
 })
 
