@@ -46,51 +46,48 @@ var db = mysql.createConnection({ //conection을 생성한다
 db.connect();
 
 
-// //postgres 연결 코드
-// const {Pool} = require('pg');
-// const pg = new Pool({
-//   user: 'postgres',
-//   host: 'localhost',
-//   database: 'accounts',
-//   password: 'password',
-//   port: 5432 //postgres의 기본 포트인듯?
-// })
-//
-// //postgres 잘 연결됐는지 확인
-// pg.connect(err => {
-//   if(err) console.log(err);
-//   else{
-//     console.log("postgres connected");
-//   }
-// })
-//
-// pg.query(`SELECT * FROM account`, (err, accounts) => {
-//   if(err) console.log(err);
-//   else {
-//     console.log(accounts);
-//   }
-// })
-
-//home화면
-// app.get('/', function(request, response) {
-//   db.query(`SELECT * FROM account`, function(err, accounts){
-//     var title = "INHA METAVERSE";
-//     var description = "Welcome to Inha Metaverse";
-//     var accountlist = template.list(accounts);
-//     // console.log("이건 mysql 버전");
-//     // console.log(accounts);
-//     var html = template.HTML(title, accountlist,
-//       `<h2>${title}</h2>${description}`,
-//       `<a href="/login">로그인</a>
-//       <a href="/create">회원가입</a>`
-//     );
-//     response.send(html);
-//   })
-// });
-
-app.get('/', function(request, response) {
-  response.sendFile(__dirname + "/home.html")
+//postgres 연결 코드
+const {Pool} = require('pg');
+const pg = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'accounts',
+  password: 'password',
+  port: 5432 //postgres의 기본 포트인듯?
 })
+
+//postgres 잘 연결됐는지 확인
+pg.connect(err => {
+  if(err) console.log(err);
+  else{
+    console.log("postgres connected");
+  }
+})
+
+pg.query(`SELECT * FROM account`, (err, accounts) => {
+  if(err) console.log(err);
+  else {
+    console.log(accounts);
+  }
+})
+
+home화면
+app.get('/', function(request, response) {
+  db.query(`SELECT * FROM account`, function(err, accounts){
+    var title = "INHA METAVERSE";
+    var description = "Welcome to Inha Metaverse";
+    var accountlist = template.list(accounts);
+    // console.log("이건 mysql 버전");
+    // console.log(accounts);
+    var html = template.HTML(title, accountlist,
+      `<h2>${title}</h2>${description}`,
+      `<a href="/login">로그인</a>
+      <a href="/create">회원가입</a>`
+    );
+    response.send(html);
+  })
+});
+
 
 
 app.get('/account/:accountId', function(request, response){
