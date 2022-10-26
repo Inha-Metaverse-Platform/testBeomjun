@@ -47,22 +47,22 @@ db.connect();
 
 
 //postgres 연결 코드
-const {Pool} = require('pg');
-const pg = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'accounts',
-  password: 'password',
-  port: 5432 //postgres의 기본 포트인듯?
-})
-
-//postgres 잘 연결됐는지 확인
-pg.connect(err => {
-  if(err) console.log(err);
-  else{
-    console.log("postgres connected");
-  }
-})
+// const {Pool} = require('pg');
+// const pg = new Pool({
+//   user: 'postgres',
+//   host: 'localhost',
+//   database: 'accounts',
+//   password: 'password',
+//   port: 5432 //postgres의 기본 포트인듯?
+// })
+//
+// //postgres 잘 연결됐는지 확인
+// pg.connect(err => {
+//   if(err) console.log(err);
+//   else{
+//     console.log("postgres connected");
+//   }
+// })
 
 pg.query(`SELECT * FROM account`, (err, accounts) => {
   if(err) console.log(err);
@@ -71,7 +71,7 @@ pg.query(`SELECT * FROM account`, (err, accounts) => {
   }
 })
 
-home화면
+//home화면
 app.get('/', function(request, response) {
   db.query(`SELECT * FROM account`, function(err, accounts){
     var title = "INHA METAVERSE";
