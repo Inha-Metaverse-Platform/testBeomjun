@@ -16,8 +16,8 @@ var compression = require('compression');
 
 var template = require('./lib/template.js');
 
-var http = require('http').Server(app); //http 통신을 할거다
-var io = require('socket.io')(http); //http 통신 기반으로 socket 통신도 할거다
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 app.use(bodyParser.urlencoded({extended: false })); //body-parser가 만들어내는 미들웨어를 표현하는 식?
 //기존에는 post 방식으로 연결했을 때, 콜백함수 내에서 body 변수를 따로 만들었다
@@ -46,51 +46,46 @@ var db = mysql.createConnection({ //conection을 생성한다
 db.connect();
 
 
-// //postgres 연결 코드
-// const {Pool} = require('pg');
-// const pg = new Pool({
-//   user: 'postgres',
-//   host: 'localhost',
-//   database: 'accounts',
-//   password: 'password',
-//   port: 5432 //postgres의 기본 포트인듯?
-// })
-//
-// //postgres 잘 연결됐는지 확인
-// pg.connect(err => {
-//   if(err) console.log(err);
-//   else{
-//     console.log("postgres connected");
-//   }
-// })
-//
-// pg.query(`SELECT * FROM account`, (err, accounts) => {
-//   if(err) console.log(err);
-//   else {
-//     console.log(accounts);
-//   }
-// })
+//postgres 연결 코드
+const {Pool} = require('pg');
+const pg = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'accounts',
+  password: 'password',
+  port: 5432 //postgres의 기본 포트인듯?
+})
 
-//home화면
-// app.get('/', function(request, response) {
-//   db.query(`SELECT * FROM account`, function(err, accounts){
-//     var title = "INHA METAVERSE";
-//     var description = "Welcome to Inha Metaverse";
-//     var accountlist = template.list(accounts);
-//     // console.log("이건 mysql 버전");
-//     // console.log(accounts);
-//     var html = template.HTML(title, accountlist,
-//       `<h2>${title}</h2>${description}`,
-//       `<a href="/login">로그인</a>
-//       <a href="/create">회원가입</a>`
-//     );
-//     response.send(html);
-//   })
-// });
+//postgres 잘 연결됐는지 확인
+pg.connect(err => {
+  if(err) console.log(err);
+  else{
+    console.log("postgres connected");
+  }
+})
+
+pg.query(`SELECT * FROM account`, (err, accounts) => {
+  if(err) console.log(err);
+  else {
+    console.log(accounts);
+  }
+})
 
 app.get('/', function(request, response) {
-  response.sendFile(__dirname + "/home.html")
-})
+  db.query(`SELECT * FROM account`, function(err, accounts){
+    var title = "INHA METAVERSE";
+    var description = "Welcome to Inha Metaverse";
+    var accountlist = template.list(accounts);
+    console.log("이건 mysql 버전");
+    console.log(accounts);
+    var html = template.HTML(title, accountlist,
+      `<h2>${title}</h2>${description}`,
+      `<a href="/login">로그인</a>
+      <a href="/create">회원가입</a>`
+    );
+    response.send(html);
+  })
+});
 
 
 app.get('/account/:accountId', function(request, response){
@@ -216,7 +211,6 @@ app.post('/login_process', function(request, response){
             <h3>Hello, ${results[0].username}!</h3>
             <form action="/unity" method="post">
             <input type="submit" value="Go to Metaverse">
-            </form>
             `);
       } else {
         response.send('login failed');
@@ -401,7 +395,6 @@ if(currentUser)
 });//END_IO.ON
 });
 
-//process.env.port || 3000의 뜻은 process.env라는 객체에 port라는 설정이 있다면 그 속성을 사용하고, 없다면 3000을 사용한다는 뜻이다
 http.listen(process.env.PORT ||3000, function(){
 	console.log('listening on *:3000');
 });

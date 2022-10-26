@@ -11,33 +11,6 @@
 </head>
 
 <body>
-  <div id="control buttons">
-     <input type="text" id='msg' placeholder="alert 메시지 입력" />
-     <button onclick="doAlert()">do Alert</button>
-     <button onclick="doConsoleLog()">do ConsoleLog</button>
-     <button onclick="alertSomething()">do Alert something</button>
-     <button onclick="ping_client()">do Ping_by Client</button>
-     <button onclick="doAlertByClinet()">do Alert_by Client</button>
-     <script>
-     console.log("script 로드 완료되었습니다");
-     //html 창이 켜지자마자 실행
-       function doAlert() {
-         alert("Hello World");
-       }
-       function doConsoleLog() {
-         console.log("Hello World");
-       }
-       function alertSomething() {
-         var msg=document.getElementById('msg')
-         if(msg != ""){
-           alert(msg.value);
-         }
-       }
-       function sayUsername() {
-
-       }
-     </script>
-   </div>
    <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas" width=960 height=600></canvas>
       <div id="unity-loading-bar">
@@ -55,7 +28,7 @@
     </div>
 		<script src="/socket.io/socket.io.js"></script>
 	<script src="client.js"></script>
-
+ 
   <script>
    var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
@@ -99,9 +72,9 @@
            productName: "WebGL-Multi-Test",
            productVersion: "0.1",
 	       showBanner: unityShowBanner,
-
-
-
+	  
+	   
+  
     };
 
       // By default Unity keeps WebGL canvas render target size matched with
@@ -130,7 +103,6 @@
         }).then((unityInstance) => {
           loadingBar.style.display = "none";
 		   window.unityInstance = unityInstance; // <-- this
-       console.log("unityInstance 생성 완료되었습니다!");
           fullscreenButton.onclick = () => {
             unityInstance.SetFullscreen(1);
           };
@@ -139,8 +111,8 @@
         });
       };
       document.body.appendChild(script);
-
-
+	
+	
 
 
   </script>
