@@ -64,12 +64,12 @@ db.connect();
 //   }
 // })
 
-pg.query(`SELECT * FROM account`, (err, accounts) => {
-  if(err) console.log(err);
-  else {
-    console.log(accounts);
-  }
-})
+// pg.query(`SELECT * FROM account`, (err, accounts) => {
+//   if(err) console.log(err);
+//   else {
+//     console.log(accounts);
+//   }
+// })
 
 //home화면
 app.get('/', function(request, response) {
