@@ -5,7 +5,7 @@ var app = require("express")();
 var http = require('http').createServer(app); //http 통신을 위한 모듈
 var io = require('socket.io')(http); //socket 객체
 
-
+app.get('/', (req, res) => res.send('Hello World!'));
 
 http.listen(3000, function(){ //3000 포트에서 socket 연결을 기다립니다
   console.log("listening on *:3000");
@@ -15,7 +15,7 @@ http.listen(3000, function(){ //3000 포트에서 socket 연결을 기다립니�
 io.on('connection', function (socekt) {
   //연결되면 콘솔에 출력
   console.log(socket.id, 'Connected');
-  //이건 클라이언트에게 전달..?
+  //socket.emit 함수는 data와 함께
   socket.emit('msg', `${socket.id} 연결 되었습니다.`);
   socket.on('msg', function(data) {
     console.log(socket.id, data);

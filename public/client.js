@@ -17,9 +17,10 @@ window.addEventListener('load', function() {
 
 	};//END_exe_In_Unity
 
-
-	socket.on('PONG', function(socket_id,msg) {
-
+//socket.emit('PONG'); 이 실행되었을 때 동작한다
+//패러미터로는 일단 socket.id, pack.msg가 들어왔다
+	socket.on('PONG', function(socket_id,msg) {//또 콜백함수 일단 열어
+		//
 	  var currentUserAtr = socket_id+':'+msg;
 
 	 if(window.unityInstance!=null)
@@ -146,10 +147,3 @@ window.onload = (e) => {
 
 
   }
-	function doAlertByClinet() {
-		alert("Hello World_byClient");
-	}
-
-	function ping_client() {
-		window.unityInstance.SendMessage ('NetworkManager', 'EmitPing');
-	}
