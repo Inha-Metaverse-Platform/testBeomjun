@@ -1,65 +1,21 @@
-//express import해서 그걸로 서버를 열었음
 var express = require("express");
 var app = express()
 
-//http 모듈은 무슨 기능이지?
-//var http = require('http');
-
-var fs = require('fs');
 var path = require('path')
-var url = require('url');
-var qs = require('querystring');
-var mysql = require('mysql');
 
 var bodyParser = require('body-parser');
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
+
 var compression = require('compression');
+app.use(compression());
 
 var template = require('./lib/template.js');
 
-var http = require('http').Server(app); //http 통신을 할거다
-var io = require('socket.io')(http); //http 통신 기반으로 socket 통신도 할거다
+// var http = require('http').Server(app);
+// var io = require('socket.io')(http); //http 통신 기반으로 socket 통신도 할거다
 
-app.use(bodyParser.urlencoded({extended: false })); //body-parser가 만들어내는 미들웨어를 표현하는 식?
-//기존에는 post 방식으로 연결했을 때, 콜백함수 내에서 body 변수를 따로 만들었다
-//하지만 body-parse를 사용하면 body가 알아서 처리된다
-
-app.use(compression()); //compression 함수를 가져온건가?
-
-//설치된 mysql DB와 통신하기 위한 코드
-var db = mysql.createConnection({ //conection을 생성한다
-  host     : 'localhost', //node.js 서버와 mysql 서버가 같은 곳에 있음
-  user     : 'root',
-  password : 'password', //mysql에서 사용중인 패스워드
-  database : 'testsql' //사용할 데이터베이스
-});
-
-db.connect();
-
-
-//postgres 연결 코드
-// const {Pool} = require('pg');
-// const pg = new Pool({
-//   user: 'postgres',
-//   host: 'localhost',
-//   database: 'accounts',
-//   password: 'password',
-//   port: 5432 //postgres의 기본 포트인듯?
-// })
-//
-// //postgres 잘 연결됐는지 확인
-// pg.connect(err => {
-//   if(err) console.log(err);
-//   else{
-//     console.log("postgres connected");
-//   }
-// })
-
-// pg.query(`SELECT * FROM account`, (err, accounts) => {
-//   if(err) console.log(err);
-//   else {
-//     console.log(accounts);
-//   }
-// })
+const db = require('./lib/postgres')
 
 //home화면
 app.get('/', function(request, response) {
@@ -67,8 +23,8 @@ app.get('/', function(request, response) {
     var title = "INHA METAVERSE";
     var description = "Welcome to Inha Metaverse";
     var accountlist = template.list(accounts);
-    // console.log("이건 mysql 버전");
-    // console.log(accounts);
+    console.log("이건 mysql 버전");
+    console.log(accounts);
     var html = template.HTML(title, accountlist,
       `<h2>${title}</h2>${description}`,
       `<a href="/login">로그인</a>
