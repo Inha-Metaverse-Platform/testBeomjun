@@ -27,5 +27,6 @@ server.use((req, res) => {
 
 server.listen(3000, (err) => {
   if (err) return console.log(err);
+  console.log("********************")
   console.log("The server is listening on port 3000");
 });
