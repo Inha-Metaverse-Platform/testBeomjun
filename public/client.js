@@ -31,14 +31,14 @@ window.addEventListener('load', function() {
 	  
 	});//END_SOCKET.ON
 
-					      
+	//login이 성공했음을 socket 이벤트로 받아왔을 경우			      
 	socket.on('LOGIN_SUCCESS', function(id,name,position) {
 				      		
 	  var currentUserAtr = id+':'+name+':'+position;
-	  
+		//유니티가 제대로 실행중이라면
 	   if(window.unityInstance!=null)
 		{
-		 
+		//NetworkManager 스크립트에서, OnJoinGame을 실행, 패러미터로는 currentUserAtr를 넘겨줌
 		  window.unityInstance.SendMessage ('NetworkManager', 'OnJoinGame', currentUserAtr);
 		
 		}
