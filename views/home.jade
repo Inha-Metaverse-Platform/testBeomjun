@@ -1,0 +1,27 @@
+doctype html
+html(lang='en' dir='ltr')
+  head
+    title INHA METAVERSE
+    meta(charset='utf-8')
+    link(rel='stylesheet' href='http://localhost:3000/style/styles.css') 
+  body
+    .home_box
+      span.banner
+        .login_box
+          span.select 공간
+          span.select 프로젝트
+          span.select 프로필
+          span.select 지원
+          if bool=isSignedIn
+            button.bubble_button(onclick="location.href='/signout'")
+              | 로그아웃
+          else
+            button.bubble_button(onclick="location.href='/signin'")
+              | 로그인
+      .title_box
+        img(src='http://localhost:3000/img/archifree_icon.svg' alt='icon')
+        p.aa
+          | 모든 사람 모든 공간
+          br
+          |           아키프리에서
+        button.signup_button(onclick="location.href='/signup'") 회원가입

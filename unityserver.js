@@ -4,6 +4,9 @@ var http     = require('http').Server(app);// create a http web server using the
 var io       = require('socket.io')(http);// import socketio communication module
 var cookie = require('cookie');
 
+app.set( 'views', __dirname + '/views' );  
+app.set( 'view engine', 'jade' );
+app.use( express.static( './' ) );
 
 var db = require('./lib/postgres')
 
@@ -13,22 +16,12 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
 
-console.log(request.headers.cookie);
-// if(request.headers.cookie){
-// 	cookies = cookie.parse(request.headers.cookie);
-// }
-
 app.use('/example', express.static('example'))
 app.use('/img', express.static(__dirname + '/views/img'))
 app.use('/style', express.static(__dirname + '/views/style'))
 
 app.get('/', (req, res) => {
-	var isSignedin = false;
-	var cookies = {};
-	if(request.headers.cookie){
-		cookies = cookie.parse(request.headers.cookie);
-	}
-	res.sendFile(__dirname + '/views/home.html');
+	res.render('home', {isSignedIn: db.checkCookie(req)});
 })
 
 app.get('/signup', (req, res) => {
@@ -39,6 +32,11 @@ app.get('/signin', (req, res) => {
 	res.sendFile(__dirname + '/views/signin.html');
 })
 app.post('/signin', db.checkSignin)
+
+app.get('/signout', (req, res) => {
+	res.clearCookie('email');
+    res.clearCookie('password').redirect('/');
+})
 
 app.get('/users', db.getUsers)
 app.get('/users/:id', db.getUserById)
