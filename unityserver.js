@@ -6,7 +6,6 @@ var cookie = require('cookie');
 
 app.set( 'views', __dirname + '/views' );  
 app.set( 'view engine', 'jade' );
-app.use( express.static( './' ) );
 
 var db = require('./lib/postgres')
 
@@ -19,6 +18,11 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use('/example', express.static('example'))
 app.use('/img', express.static(__dirname + '/views/img'))
 app.use('/style', express.static(__dirname + '/views/style'))
+
+app.use("/public/TemplateData",express.static(__dirname + "/public/TemplateData"));
+app.use("/public/Build",express.static(__dirname + "/public/Build"));
+
+app.use('/unity', express.static(__dirname+'/public'));
 
 app.get('/', (req, res) => {
 	res.render('home', {isSignedIn: db.checkCookie(req)});
@@ -35,7 +39,8 @@ app.post('/signin', db.checkSignin)
 
 app.get('/signout', (req, res) => {
 	res.clearCookie('email');
-    res.clearCookie('password').redirect('/');
+    res.clearCookie('password');
+	res.redirect('/');
 })
 
 app.get('/users', db.getUsers)
@@ -45,16 +50,16 @@ app.put('/users/:id', db.updateUser)
 app.delete('/users/:id', db.deleteUser)
 
 app.post('/unity', function(request, response){
+	
+
 	response.sendFile(__dirname + "/public/index.html");
   
-	app.use("/public/TemplateData",express.static(__dirname + "/public/TemplateData"));
-	app.use("/public/Build",express.static(__dirname + "/public/Build"));
-	app.use(express.static(__dirname+'/public'));
+	
   
 	var clients			= [];// to storage clients
 	var clientLookup = {};// clients search engine
 	var sockets = {};//// to storage sockets
-  
+	console.log("socket opened");
   
 	//open a connection with the specific client
 	io.on('connection', function(socket){
