@@ -1,8 +1,10 @@
 var express = require("express");
 var app = express()
+var http     = require('http').Server(app);// create a http web server using the http library
+var io       = require('socket.io')(http);// import socketio communication module
 
 var path = require('path')
-
+var mysql = require('mysql');
 var bodyParser = require('body-parser');
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
@@ -15,7 +17,16 @@ var template = require('./lib/template.js');
 // var http = require('http').Server(app);
 // var io = require('socket.io')(http); //http 통신 기반으로 socket 통신도 할거다
 
-const db = require('./lib/postgres')
+//const db = require('./lib/postgres')
+var db = mysql.createConnection({
+	host:'localhost',
+	user:'root',
+	password:'password',
+	database:'testsql'
+  });
+  
+db.connect();
+
 
 //home화면
 app.get('/', function(request, response) {
@@ -23,8 +34,6 @@ app.get('/', function(request, response) {
     var title = "INHA METAVERSE";
     var description = "Welcome to Inha Metaverse";
     var accountlist = template.list(accounts);
-    console.log("이건 mysql 버전");
-    console.log(accounts);
     var html = template.HTML(title, accountlist,
       `<h2>${title}</h2>${description}`,
       `<a href="/login">로그인</a>

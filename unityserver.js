@@ -2,17 +2,43 @@ var express  = require('express');//import express NodeJS framework module
 var app      = express();// create an object of the express module
 var http     = require('http').Server(app);// create a http web server using the http library
 var io       = require('socket.io')(http);// import socketio communication module
+var cookie = require('cookie');
 
 
-const db = require('./queries')
+var db = require('./lib/postgres')
 
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const { request } = require('http');
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
+
+console.log(request.headers.cookie);
+// if(request.headers.cookie){
+// 	cookies = cookie.parse(request.headers.cookie);
+// }
+
+app.use('/example', express.static('example'))
+app.use('/img', express.static(__dirname + '/views/img'))
+app.use('/style', express.static(__dirname + '/views/style'))
+
 app.get('/', (req, res) => {
-	res.send('home');
+	var isSignedin = false;
+	var cookies = {};
+	if(request.headers.cookie){
+		cookies = cookie.parse(request.headers.cookie);
+	}
+	res.sendFile(__dirname + '/views/home.html');
 })
+
+app.get('/signup', (req, res) => {
+	res.sendFile(__dirname + '/views/signup.html');
+})
+
+app.get('/signin', (req, res) => {
+	res.sendFile(__dirname + '/views/signin.html');
+})
+app.post('/signin', db.checkSignin)
 
 app.get('/users', db.getUsers)
 app.get('/users/:id', db.getUserById)
@@ -20,9 +46,7 @@ app.post('/users', db.createUser)
 app.put('/users/:id', db.updateUser)
 app.delete('/users/:id', db.deleteUser)
 
-app.get('/unity', function(request, response){
-	// var filteredUserId = path.parse(request.params.userId).base;
-	// console.log(filteredUserId);
+app.post('/unity', function(request, response){
 	response.sendFile(__dirname + "/public/index.html");
   
 	app.use("/public/TemplateData",express.static(__dirname + "/public/TemplateData"));

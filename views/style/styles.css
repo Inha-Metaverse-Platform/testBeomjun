@@ -1,0 +1,138 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  font-size: 14px;
+}
+
+button {
+  transition: background 0.3s ease-in-out,
+              color 0.3s ease-in-out;
+}
+.home_box{
+  background: rgba(179,179,179,1);
+  width: 100%;
+  height: 1020px;
+}
+.aa {
+  width: 613px;
+  height: 156px;
+
+  font-family: 'SF Pro';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 78px;
+  text-align: center; 
+  color: #FFFFFF;
+}
+#side_bar{
+  background-color: teal;
+  width: 100%;
+  height: 20px;
+}
+#content_box{
+  margin: 10px;
+}
+.title_box{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  gap: 30px;
+
+  position: absolute;
+  width: 613px;
+  height: 500px;
+  left: 653px;
+  top: 364px;
+  width: 613px;
+
+}
+.icon{
+  width: 93.37px;
+  height: 92.05px;
+
+  background: #FFFFFF;
+}
+.login_box{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 50px;
+
+  position: absolute;
+  width: 553px;
+  height: 58px;
+  left: 1307px;
+  top: 40px;
+}
+.select {
+  color: rgba(255,255,255,1);
+  font-family: SF Pro;
+  font-weight: Medium;
+  font-size: 18px;
+  opacity: 1;
+  text-align: center;
+}
+.bubble_button {
+  width: 126px;
+  height: 58px;
+  background: rgba(0,0,0,1);
+  opacity: 1;
+  position: relative;
+  top: 0px;
+  left: 0px;
+  border-top-left-radius: 29px;
+  border-top-right-radius: 29px;
+  border-bottom-left-radius: 29px;
+  border-bottom-right-radius: 29px;
+  overflow: hidden;
+
+  color: rgba(255,255,255,1);
+  font-family: SF Pro;
+  font-weight: Medium;
+  font-size: 18px;
+  opacity: 1;
+  text-align: center;
+}
+.bubble_button:hover {
+  background-color: white;
+  color:black;
+  cursor: pointer;
+}
+.logo {
+
+  position: absolute;
+  left: 3.12%;
+  right: 91.12%;
+  top: 1.12%;
+  bottom: 98.38%;
+}
+.signup_button {
+  width: 261px;
+  height: 58px;
+  background: rgba(255,255,255,1);
+  opacity: 1;
+  position: relative;
+  top: 0px;
+  left: 0px;
+  border-top-left-radius: 29px;
+  border-top-right-radius: 29px;
+  border-bottom-left-radius: 29px;
+  border-bottom-right-radius: 29px;
+  overflow: hidden;
+
+  color: rgba(0,0,0,1);
+  font-family: SF Pro;
+  font-weight: Medium;
+  font-size: 20px;
+  opacity: 1;
+  text-align: center;
+}
+.signup_button:hover {
+  background: black;
+  color:white;
+  cursor: pointer;
+}

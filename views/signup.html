@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <title>회원가입</title>
+    <meta charset="utf-8">
+    <script type="text/text/javascript" src="./lib/template.js"></script>
+  </head>
+  <body>
+
+    <h1><a href="/">HOME</a></h1>
+    <form action="/users" method="post">
+      
+      <p><input type="text" name="email" placeholder="이메일" required><button type="button" onclick='alert("사용 가능합니다")'>중복확인</button></p>
+      <p><input type="text" name="password" placeholder="비밀번호" required></p>
+      <p><input type="text" name="nickname" placeholder="닉네임" required></p>
+      <p>관심 분야</p>
+      <p>
+        <input type='checkbox' name='check_plan' value="true" />기획
+        <input type='checkbox' name='check_design' value="true" />디자인
+        <input type='checkbox' name='check_development' value="true" />개발
+        <input type='checkbox' name='check_marketting' value="true" />마케팅
+        </p>
+      <input type="submit" value="회원가입">
+      
+    </form>
+  </body>
+</html>
