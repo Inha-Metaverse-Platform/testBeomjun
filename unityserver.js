@@ -15,14 +15,12 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
 
-app.use('/example', express.static('example'))
 app.use('/img', express.static(__dirname + '/views/img'))
 app.use('/style', express.static(__dirname + '/views/style'))
 
-app.use("/public/TemplateData",express.static(__dirname + "/public/TemplateData"));
-app.use("/public/Build",express.static(__dirname + "/public/Build"));
-
-app.use('/unity', express.static(__dirname+'/public'));
+// app.use("/public/TemplateData",express.static(__dirname + "/public/TemplateData"));
+// app.use("/public/Build",express.static(__dirname + "/public/Build"));
+// app.use('/unity', express.static(__dirname+'/public'));
 
 app.get('/', (req, res) => {
 	res.render('home', {isSignedIn: db.checkCookie(req)});
@@ -49,8 +47,10 @@ app.post('/users', db.createUser)
 app.put('/users/:id', db.updateUser)
 app.delete('/users/:id', db.deleteUser)
 
-app.post('/unity', function(request, response){
-	
+app.get('/unity', function(request, response){
+	app.use("/public/TemplateData",express.static(__dirname + "/public/TemplateData"));
+	app.use("/public/Build",express.static(__dirname + "/public/Build"));
+	app.use(express.static(__dirname+'/public'));
 
 	response.sendFile(__dirname + "/public/index.html");
   
